@@ -13,8 +13,12 @@ class ShrioSpringbootApplicationTests {
 
     @Test
     void contextLoads() {
-        User cooper = userService.select("cooper");
-        System.out.println(cooper);
+        User user = new User();
+        user.setUsername("cooper");
+        user.setPassword("123456");
+        user.setDisabled(false);
+        user.setPerms("user:*");
+         userService.insert(user);
     }
 
 }

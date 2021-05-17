@@ -3,6 +3,7 @@ package com.example.shrio_springboot.config;
 import com.example.shrio_springboot.config.shiro.JwtDefaultSubjectFactory;
 import com.example.shrio_springboot.config.shiro.JwtRealm;
 import com.example.shrio_springboot.filter.JwtFilter;
+import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SubjectFactory;
@@ -32,7 +33,9 @@ public class ShiroConfig2 {
 
     @Bean
     public Realm realm() {
-        return new JwtRealm();
+        JwtRealm jwtRealm = new JwtRealm();
+        jwtRealm.setCredentialsMatcher(hashedCredentialsMatcher());
+        return jwtRealm;
     }
 
     @Bean
@@ -80,6 +83,17 @@ public class ShiroConfig2 {
         shiroFilter.setFilterChainDefinitionMap(filterRuleMap);
 
         return shiroFilter;
+    }
+
+    /*
+     * 凭证匹配器
+     */
+    @Bean
+    public HashedCredentialsMatcher hashedCredentialsMatcher() {
+        HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
+        hashedCredentialsMatcher.setHashAlgorithmName("md5");// 散列算法:这里使用MD5算法;
+        hashedCredentialsMatcher.setHashIterations(1024);// 散列的次数，比如散列两次，相当于md5(md5(""));
+        return hashedCredentialsMatcher;
     }
 }
 
