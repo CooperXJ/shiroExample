@@ -14,4 +14,6 @@ public class User {
     private String password;
     @TableField
     private String perms;
+    @TableField
+    private boolean disabled;
 }

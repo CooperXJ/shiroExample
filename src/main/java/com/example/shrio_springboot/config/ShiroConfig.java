@@ -1,5 +1,6 @@
 package com.example.shrio_springboot.config;
 
+import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -11,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-@Configuration
+//@Configuration
 public class ShiroConfig {
 
     @Bean
@@ -52,6 +53,15 @@ public class ShiroConfig {
     //创建realm
     @Bean(name = "customRealm")
     public CustomRealm getCustomRealm(){
-        return new CustomRealm();
+        CustomRealm customRealm = new CustomRealm();
+        //设置缓存
+        customRealm.setCacheManager(new EhCacheManager());
+        //开启全局缓存
+        customRealm.setCachingEnabled(true);
+        customRealm.setAuthenticationCachingEnabled(true);//开启认证缓存
+        customRealm.setAuthenticationCacheName("authenticationCacheCache");//取名字
+        customRealm.setAuthorizationCachingEnabled(true);//开启授权缓存
+        customRealm.setAuthorizationCacheName("authorizationCache");//取名字
+        return customRealm;
     }
 }
